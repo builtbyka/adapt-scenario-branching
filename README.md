@@ -1,5 +1,8 @@
+# extended from the work of completed here https://github.com/commelius/adapt-simple-branching
+Extended functionality to include more than two options
+
 # adapt-scenario-branching
-An Adapt framework extension to add simple branching functionality. Based on the results of the question the scenario-branching block can display/hide it's components.
+An Adapt framework extension to add scenario branching functionality. Based on the results of the question the scenario-branching block can display/hide it's components.
 
 ## Installation
 
