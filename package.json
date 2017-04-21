@@ -1,0 +1,15 @@
+{
+    "name":"adapt-scenario-branching",
+    "version":"0.5.1",
+    "description":"An extension to add simple branching functionality. Based on the results of the question the scenario-branching block can display/hide it's components.",
+    "repository":{
+        "type":"git",
+        "url":"https://github.com/commelius/adapt-scenario-branching.git"
+    },
+	"author": "Lukasz 'Severiaan' Grela",
+	"license": "GPL v3",
+	"bugs": {
+		"url": "https://github.com/commelius/adapt-scenario-branching/issues"
+	},
+	"homepage": "https://github.com/commelius/adapt-scenario-branching"
+}
