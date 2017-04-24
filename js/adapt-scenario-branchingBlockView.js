@@ -60,16 +60,26 @@ define([
                     }
                 }else if (config.hasOwnProperty("correct") && config.hasOwnProperty("incorrect")) {
                     if (!this.model.isQuestionCorrect()) {
-                        this._setCompletionOnModel(this.model.getCorrectModel(), true);
-                        models = this.model.getCorrectModel();
-                        // //disable hidden children
-                        this._disableModel(this.model.getCorrectModel());
+                    this._setCompletionOnModel(this.model.getCorrectModel(), true);
                     } else {
                         this._setCompletionOnModel(this.model.getIncorrectModel(), true);
-                        models = this.model.getIncorrectModel();
-                        // //disable hidden children
-                        this._disableModel(this.model.getIncorrectModel());
                     }
+                }
+            }
+
+            if (config.hasOwnProperty("correct") && config.hasOwnProperty("incorrect")) {
+                if (this.model.isQuestionCorrect()) {
+                    //show 'correct' component
+                    models = this.model.getCorrectModel();
+                } else {
+                    //show 'incorrect' component
+                    models = this.model.getIncorrectModel();
+                }
+                //disable hidden children
+                if (!this.model.isQuestionCorrect()) {
+                    this._disableModel(this.model.getCorrectModel());
+                } else {
+                    this._disableModel(this.model.getIncorrectModel());
                 }
             }
 
