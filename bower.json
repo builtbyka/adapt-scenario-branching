@@ -1,0 +1,15 @@
+{
+    "name": "adapt-scenario-branching",
+    "version": "0.0.1",
+    "displayName": "Scenario Branching",
+    "main": "/js/adapt-scenario-branching.js",
+    "keywords": [
+        "adapt-plugin",
+        "adapt-extension"
+    ],
+    "authors": [
+		"Lukasz 'Severiaan' Grela, extended by Kerri-anne Ellis" 
+	],
+    "license": "GPL-3.0",
+    "homepage": "https://github.com/commelius/adapt-scenario-branching"
+}
