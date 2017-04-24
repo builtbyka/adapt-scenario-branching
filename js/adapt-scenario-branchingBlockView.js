@@ -46,28 +46,40 @@ define([
             var forceCompletion = this.model.isForceCompletion();
            //console.log("SimpleBranchingView" + ":" + this.model.get("_id"), "forceCompletion", forceCompletion);
             if (forceCompletion) {
-                this._setCompletionOnModel(this.model.getCorrectModel(), true);
-                this._setCompletionOnModel(this.model.getIncorrectModel(), true);
+                if (config.hasOwnProperty("userAnswer")) {
+                    var ans = this.model.isQuestionAnswer();
+                    this._setCompletionOnModel(this.model.getAnswerModel(ans), true);
+                }else if (config.hasOwnProperty("correct") && config.hasOwnProperty("incorrect")) {
+                    this._setCompletionOnModel(this.model.getCorrectModel(), true);
+                    this._setCompletionOnModel(this.model.getIncorrectModel(), true);
+                }
             } else {
                 //force completion of "hidden" child
-
                 var config = this.model.getConfig();
                 if (config.hasOwnProperty("userAnswer")) {
-                    var ans = this.model.isQuestionAnswer(),
-                    models = this.model.getAnswerModel(ans);
-                    if (!isNaN(this.model.isQuestionAnswer())) {
-                        this._setCompletionOnModel(models, true);
-                    }
+                    var ans = this.model.isQuestionAnswer();
+                        this._setCompletionOnModel(this.model.getAnswerModel(ans), true);
                 }else if (config.hasOwnProperty("correct") && config.hasOwnProperty("incorrect")) {
                     if (!this.model.isQuestionCorrect()) {
-                    this._setCompletionOnModel(this.model.getCorrectModel(), true);
+                        this._setCompletionOnModel(this.model.getCorrectModel(), true);
                     } else {
                         this._setCompletionOnModel(this.model.getIncorrectModel(), true);
                     }
                 }
             }
 
-            if (config.hasOwnProperty("correct") && config.hasOwnProperty("incorrect")) {
+            if (config.hasOwnProperty("userAnswer")) {
+                var ans = this.model.isQuestionAnswer();
+                //show chosen answer
+                models = this.model.getAnswerModel(ans);
+
+                var notAns = this.model.isQuestionNotAnswer();
+
+                for (var i = 0, len = notAns.length; i < len; i++) {
+                    this._disableModel(this.model.getAnswerModel(ans));
+                }
+                
+            } else if (config.hasOwnProperty("correct") && config.hasOwnProperty("incorrect")) {
                 if (this.model.isQuestionCorrect()) {
                     //show 'correct' component
                     models = this.model.getCorrectModel();

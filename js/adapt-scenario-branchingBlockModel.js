@@ -99,6 +99,15 @@ define([
             var answer = questionModel.get("_userAnswer");
            return answer.indexOf(true);
         },
+        isQuestionNotAnswer: function () {
+            var questionModel = this.getQuestionModel(),
+                answer = questionModel.get("_userAnswer"),
+                notAnswer = [];
+            for (var i = 0, len = answer.length; i < len; i++) {
+                if(!answer[i]) notAnswer.push(i);
+            }
+           return notAnswer;
+        },
         /**
          * Returns Question model
          */
@@ -132,7 +141,7 @@ define([
             if (!this.isUsingUserAnswer()) return;
             var config = this.getConfig(),
             ids = config.userAnswer[ans];
-
+            
             return this._getModels(ids);
         },
 
