@@ -39,13 +39,24 @@
             "forceCompletion": false
         }
 
-//components can be displayed based on a specific answer. based on order they appear in 'items' in component
+//components can be displayed based on a specific answer. Uses order they appear in 'items' in component
         "_scenario": {
             "questionId": "c-05",
             "userAnswer": {
                 "0": "c-10",
                 "1": "c-15",
                 "2": "c-20"
+            },
+            "forceCompletion": false
+        }
+
+//components can be displayed based on a specific answer. Can have more than one component
+        "_scenario": {
+            "questionId": "c-05",
+            "userAnswer": {
+                "0": "c-10,c-21",
+                "1": "c-15,c-21",
+                "2": "c-20,c-21"
             },
             "forceCompletion": false
         },

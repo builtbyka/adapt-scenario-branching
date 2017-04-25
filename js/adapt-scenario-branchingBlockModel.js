@@ -67,7 +67,13 @@ define([
 
             if (config.hasOwnProperty("userAnswer")) {
                 if (this.isUsingUserAnswer()) {
-                    result = this._checkUserAnswerModel(config.userAnswer, id);
+                    var ans = config.userAnswer,
+                        strAns = '';
+                    for (var key in ans) {
+                        strAns += ans[key]+',';
+                    }
+                    strAns = strAns.slice(0, -1);
+                    result = this._checkUserAnswerModel(strAns, id);
                 }
             }else if (config.hasOwnProperty("correct") && config.hasOwnProperty("incorrect")) {
                 if (this.isUsingCorrect()) {
@@ -178,24 +184,7 @@ define([
         _checkModel: function (ids, id, type) {
             //console.info("BranchingBlockModel", "_checkModel", arguments);
             var model;
-            if(type === 'userAnswer') {
-                for (var key in ids) {
-                    model = this._getModel(ids[key]);
 
-                    if (!model) {
-                        console.error("BranchingBlockModel", "There is no component mentioned in '" + type + "' ('" + ids[key] + "') for block '" + id + "'.");
-                        return false;
-                    }
-
-                    if (model.get("_parentId") !== this.get("_id")) {
-                        console.error("BranchingBlockModel", "Component mentioned in '" + type + "' may not be a child of block '" + id + "'.");
-                        return false;
-                    }
-
-                    return true;
-
-                }
-            }else{
                 if (ids.indexOf(",") == -1) {
 
                     model = this._getModel(ids);
@@ -213,17 +202,16 @@ define([
                     var listIds = ids.split(",");
                     var result = false,
                         i = 0;
-
                     while (listIds.length > 0) {
                         var li = listIds.pop();
-                        result = this._checkModel(li, id, type);
+                            result = this._checkModel(li, id, type);
                         if (!result) break;
                     }
 
                     return result;
                 }
                 return true;
-            }
+
         },
 
         _getModels: function (ids) {
