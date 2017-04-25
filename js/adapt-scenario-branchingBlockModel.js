@@ -141,7 +141,6 @@ define([
             if (!this.isUsingUserAnswer()) return;
             var config = this.getConfig(),
             ids = config.userAnswer[ans];
-            
             return this._getModels(ids);
         },
 
@@ -152,7 +151,6 @@ define([
             if (!this.isUsingCorrect()) return;
             var config = this.getConfig(),
             ids = config.correct;
-
             return this._getModels(ids);
         },
         /**

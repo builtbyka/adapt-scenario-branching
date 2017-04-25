@@ -76,7 +76,7 @@ define([
                 var notAns = this.model.isQuestionNotAnswer();
 
                 for (var i = 0, len = notAns.length; i < len; i++) {
-                    this._disableModel(this.model.getAnswerModel(ans));
+                    this._disableModel(this.model.getAnswerModel(notAns[i]));
                 }
                 
             } else if (config.hasOwnProperty("correct") && config.hasOwnProperty("incorrect")) {
@@ -86,6 +86,7 @@ define([
                 } else {
                     //show 'incorrect' component
                     models = this.model.getIncorrectModel();
+
                 }
                 //disable hidden children
                 if (!this.model.isQuestionCorrect()) {
@@ -96,7 +97,6 @@ define([
             }
 
             if (models && models.length > 0) {
-
                 for (var i = 0, max = models.length; i < max; i++) {
                     var m = models[i];
                     this.$("." + m.get("_id")).removeClass("display-none");

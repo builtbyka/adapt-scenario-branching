@@ -3,7 +3,7 @@
 //simple branching block will listen for completion of c-05 question
 //and need to contain 2 components c-10 and c-15, if c-05 is answered 
 //correctly then c-15 is displayed, otherwise c-10
-        "_branching": {
+        "_scenario": {
             "questionId": "c-05",
             "incorrect": "c-10",
             "correct": "c-15",
@@ -14,7 +14,7 @@
 //and need to contain 3 components c-10, c-10b and c-15, if c-05 is answered 
 //correctly then c-15 is displayed, otherwise c-10 and c-10b,
 //this is useful when one want to have 2 components displayed in the same block e.g. text and graphic in left and right layout
-        "_branching": {
+        "_scenario": {
             "questionId": "c-05",
             "incorrect": "c-10,c-10b",
             "correct": "c-15",
@@ -24,7 +24,7 @@
 //below 2 examples are useful when you need to display more than 1 component based on answer 
 //e.g. you need to display c-10 and c-20 when user fails in c-05
 //only correct component is used and displayed if c-05 is answered correctly
-        "_branching": {
+        "_scenario": {
             "questionId": "c-05",
             "incorrect": "",
             "correct": "c-25",
@@ -38,3 +38,14 @@
             "correct": "",
             "forceCompletion": false
         }
+
+//components can be displayed based on a specific answer. based on order they appear in 'items' in component
+        "_scenario": {
+            "questionId": "c-05",
+            "userAnswer": {
+                "0": "c-10",
+                "1": "c-15",
+                "2": "c-20"
+            },
+            "forceCompletion": false
+        },
