@@ -33,6 +33,7 @@ define([
                     }
                 }), this);
             }
+            
             //
             this.model.set("_isVisible", false);
             this.$el.addClass("display-none");
@@ -57,8 +58,10 @@ define([
                 //force completion of "hidden" child
                 var config = this.model.getConfig();
                 if (config.hasOwnProperty("userAnswer")) {
-                    var ans = this.model.isQuestionAnswer();
-                        this._setCompletionOnModel(this.model.getAnswerModel(ans), true);
+                    var notAns = this.model.isQuestionNotAnswer();
+                    for (var i = 0, len = notAns.length; i < len; i++) {
+                        this._setCompletionOnModel(this.model.getAnswerModel(notAns[i]));
+                    }
                 }else if (config.hasOwnProperty("correct") && config.hasOwnProperty("incorrect")) {
                     if (!this.model.isQuestionCorrect()) {
                         this._setCompletionOnModel(this.model.getCorrectModel(), true);
@@ -86,7 +89,6 @@ define([
                 } else {
                     //show 'incorrect' component
                     models = this.model.getIncorrectModel();
-
                 }
                 //disable hidden children
                 if (!this.model.isQuestionCorrect()) {
@@ -103,6 +105,7 @@ define([
                     m.set("_isAvailable", true);
                 }
             }
+
             //
             this.model.set("_isVisible", true);
             this.$el.removeClass("display-none");
@@ -123,6 +126,7 @@ define([
                         "_isComplete": status,
                         "_isInteractionComplete": status
                     });
+
                 }
             }
         },
