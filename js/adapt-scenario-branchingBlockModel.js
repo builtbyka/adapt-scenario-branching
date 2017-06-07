@@ -12,9 +12,6 @@ define([
             if (!o.hasOwnProperty("_isEnabled")) {
                 o._isEnabled = true;
             }
-            if (!o.hasOwnProperty("forceCompletion")) {
-                o.forceCompletion = true;
-            }
         },
         setCompletionStatus: function () {
             this.set({
@@ -23,7 +20,7 @@ define([
             });
         },
 
-        //PUBLIC
+        // //PUBLIC
         isBranchingEnabled: function () {
             var o = this.get(BRANCHING_ID);
             if (o && o._isEnabled && this.isConfigValid()) return true;
@@ -34,9 +31,9 @@ define([
 
             return config;
         },
-        /**
-         * Checks if the config object passed from JSON is valid
-         */
+        // /**
+        //  * Checks if the config object passed from JSON is valid
+        //  */
         isConfigValid: function () {
             var config = this.getConfig(),
                 id = this.get("_id"),
@@ -56,34 +53,31 @@ define([
                     console.error("BranchingBlockModel", "There is no component mentioned in 'questionId' ('" + config.questionId + "') for block '" + id + "'.");
                     return false;
                 }
-
-                if (questionModel.get("_parentId") === this.get("_id")) {
-                    console.error("BranchingBlockModel", "Component mentioned in 'questionId' may not be a child of block '" + id + "'.");
-                    return false;
-                }
             }
 
              //This was from simple branching. Checked with the user had filled in a correct or incorrect. I am expanding to include more than two options
+            if(config.hasOwnProperty("answers")){
+                if (config.answers.hasOwnProperty("0")) {
+                    if (this.isUsingUserAnswer()) {
+                        var ans = config.answers,
+                            strAns = '';
+                        for (var key in ans) {
+                            strAns += ans[key]+',';
+                        }
+                        strAns = strAns.slice(0, -1);
 
-            if (config.hasOwnProperty("userAnswer")) {
-                if (this.isUsingUserAnswer()) {
-                    var ans = config.userAnswer,
-                        strAns = '';
-                    for (var key in ans) {
-                        strAns += ans[key]+',';
+                        result = this._checkUserAnswerModel(strAns, id);
                     }
-                    strAns = strAns.slice(0, -1);
-                    result = this._checkUserAnswerModel(strAns, id);
-                }
-            }else if (config.hasOwnProperty("correct") && config.hasOwnProperty("incorrect")) {
-                if (this.isUsingCorrect()) {
-                    result = this._checkCorrectModel(config.correct, id);
-                }
-                if (this.isUsingIncorrect()) {
-                    result = this._checkIncorrectModel(config.incorrect, id);
+                }else if (config.answers.hasOwnProperty("correct") && config.answers.hasOwnProperty("incorrect")) {
+                    if (this.isUsingCorrect()) {
+                        result = this._checkCorrectModel(config.answers.correct, id);
+                    }
+                    if (this.isUsingIncorrect()) {
+                        result = this._checkIncorrectModel(config.answers.incorrect, id);
+                    }
                 }
             }else{
-                console.error("BranchingBlockModel", "Missing 'userAnswer or correct & incorrect' property in block '" + id + "'.");
+                    console.error("BranchingBlockModel", "Missing 'answers either by number or correct/incorrect' property in block '" + id + "'.");
             }
             
             return result;
@@ -103,7 +97,7 @@ define([
         isQuestionAnswer: function () {
             var questionModel = this.getQuestionModel();
             var answer = questionModel.get("_userAnswer");
-           return answer.indexOf(true);
+        return answer.indexOf(true);
         },
         isQuestionNotAnswer: function () {
             var questionModel = this.getQuestionModel(),
@@ -112,7 +106,7 @@ define([
             for (var i = 0, len = answer.length; i < len; i++) {
                 if(!answer[i]) notAnswer.push(i);
             }
-           return notAnswer;
+        return notAnswer;
         },
         /**
          * Returns Question model
@@ -123,6 +117,7 @@ define([
 
             return this._getModel(config.questionId);
         },
+        
         isUsingUserAnswer: function () {
             var config = this.getConfig();
             return config.userAnswer !== "";
@@ -135,45 +130,41 @@ define([
             var config = this.getConfig();
             return config.incorrect !== "";
         },
-        isForceCompletion: function () {
-            var config = this.getConfig();
-            return config.forceCompletion;
-        },
+       
 
-        /**
-         * An array of models associated with correct answer
-         */
+        // /**
+        //  * An array of models associated with correct answer
+        //  */
         getAnswerModel: function (ans) {
             if (!this.isUsingUserAnswer()) return;
             var config = this.getConfig(),
-            ids = config.userAnswer[ans];
+            ids = config.answers[ans];
             return this._getModels(ids);
         },
 
-        /**
-         * An array of models associated with correct answer
-         */
+        // /**
+        //  * An array of models associated with correct answer
+        //  */
         getCorrectModel: function () {
             if (!this.isUsingCorrect()) return;
             var config = this.getConfig(),
-            ids = config.correct;
+            ids = config.answers.correct;
             return this._getModels(ids);
         },
-        /**
-         * An array of models associated with incorrect answer
-         */
+        // /**
+        //  * An array of models associated with incorrect answer
+        //  */
         getIncorrectModel: function () {
             if (!this.isUsingIncorrect()) return;
 
             var config = this.getConfig(),
-                ids = config.incorrect;
-
+                ids = config.answers.incorrect;
             return this._getModels(ids);
         },
 
-        //PRIVATE
+        // //PRIVATE
         _checkUserAnswerModel: function (ids, id) {
-            return this._checkModel(ids, id, "userAnswer");
+            return this._checkModel(ids, id, "answers");
         },
         _checkCorrectModel: function (ids, id) {
             return this._checkModel(ids, id, "correct");
@@ -190,14 +181,10 @@ define([
                     model = this._getModel(ids);
 
                     if (!model) {
-                        console.error("BranchingBlockModel", "There is no component mentioned in '" + type + "' ('" + ids + "') for block '" + id + "'.");
+                        console.error("BranchingBlockModel", "There is no block mentioned in '" + type + "' ('" + ids + "') for block '" + id + "'.");
                         return false;
                     }
 
-                    if (model.get("_parentId") !== this.get("_id")) {
-                        console.error("BranchingBlockModel", "Component mentioned in '" + type + "' may not be a child of block '" + id + "'.");
-                        return false;
-                    }
                 } else {
                     var listIds = ids.split(",");
                     var result = false,
@@ -215,7 +202,6 @@ define([
         },
 
         _getModels: function (ids) {
-
             if (ids.indexOf(",") == -1) {
                 var model = this._getModel(ids);
                 if (model) return [model];
