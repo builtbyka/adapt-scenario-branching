@@ -1,4 +1,4 @@
-# extended of previous work 
+# extention of previous work 
 https://github.com/commelius/adapt-simple-branching Extended functionality of linked extension - to include more than two options. Work in progress. 
 
 # adapt-scenario-branching
